@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <title></title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+
+<body>
+<div style="display: flex;justify-content: center;position: absolute;left: 0;right: 0;top: 0;bottom: 0">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品类型</label>
+            <div class="layui-input-block" style="width: 200px">
+                <select name="parentTypeId" lay-filter="aihao">
+                    <option value="-1" selected>一级类型</option>
+                    <option th:value="${t.marketTypeId}" th:each="t:${types}" th:text="${t.typeName}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="typeName" lay-verify="required" placeholder="请输入类型名称" autocomplete="off"
+                       class="layui-input" style="width:200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序数字</label>
+            <div class="layui-input-block">
+                <input type="text" name="sort" lay-verify="required|number" placeholder="请输入排序数字" autocomplete="off"
+                       class="layui-input" style="width:200px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标样式</label>
+            <div class="layui-input-block">
+                <input type="text" name="iconClass" placeholder="请输入图标样式" autocomplete="off" class="layui-input"
+                       style="width:200px;">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form', 'table'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+        form.on('submit(*)', function (data) {
+            $.ajax({
+                url: '/addType',
+                // contentType:false,//传图片时设置
+                data: data.field,
+                dataType: 'json',
+                type: 'post',
+                // processData:false,
+                success: function (res) {
+                    if (res.res) {
+                        layer.msg(res.msg);
+                    }
+                }
+            })
+            return false;//阻止表单跳转
+        })
+
+    });
+</script>
+</html>

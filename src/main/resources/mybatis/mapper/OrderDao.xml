@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.supermarket.dao.OrderDao">
+  <resultMap id="BaseResultMap" type="com.example.supermarket.pojo.entity.Order">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="all_cost" jdbcType="DOUBLE" property="allCost" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="actual_payment" jdbcType="DOUBLE" property="actualPayment" />
+    <result column="total_deduction" jdbcType="DOUBLE" property="totalDeduction" />
+  </resultMap>
+
+</mapper>

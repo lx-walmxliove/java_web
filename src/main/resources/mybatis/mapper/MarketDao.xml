@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.supermarket.dao.MarketDao">
+  <resultMap id="BaseResultMap" type="com.example.supermarket.pojo.entity.Market">
+    <id column="marker_id" jdbcType="INTEGER" property="markerId" />
+    <result column="marker_title" jdbcType="VARCHAR" property="markerTitle" />
+    <result column="market_img" jdbcType="VARCHAR" property="marketImg" />
+    <result column="market_type_id" jdbcType="INTEGER" property="marketTypeId" />
+    <result column="market_old_price" jdbcType="DOUBLE" property="marketOldPrice" />
+    <result column="market_price" jdbcType="DOUBLE" property="marketPrice" />
+    <result column="market_on_sale" jdbcType="VARCHAR" property="marketOnSale" />
+    <result column="marker_detail" jdbcType="VARCHAR" property="markerDetail" />
+    <result column="market_count" jdbcType="INTEGER" property="marketCount" />
+    <result column="market_merchart_name" jdbcType="VARCHAR" property="marketMerchartName" />
+    <result column="market_evaluation_count" jdbcType="INTEGER" property="marketEvaluationCount" />
+  </resultMap>
+
+</mapper>

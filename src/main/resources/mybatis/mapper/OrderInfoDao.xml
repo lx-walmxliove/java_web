@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.supermarket.dao.OrderInfoDao">
+  <resultMap id="BaseResultMap" type="com.example.supermarket.pojo.entity.OrderInfo">
+    <id column="order_info_id" jdbcType="INTEGER" property="orderInfoId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="origin_market_id" jdbcType="INTEGER" property="originMarketId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="old_price" jdbcType="DOUBLE" property="oldPrice" />
+  </resultMap>
+
+</mapper>

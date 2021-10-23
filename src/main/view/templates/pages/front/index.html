@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0
+    }
+
+    body {
+        font-family: "宋体", "微软雅黑", serif;
+    }
+
+    ul, li {
+        list-style: none;
+    }
+
+    a:link, a:visited {
+        text-decoration: none;
+        /*color: #6c757d;*/
+    }
+
+    .list ul li {
+        background-color: #1a1e21;
+        border-bottom: 0;
+    }
+
+    .list ul li a {
+        padding-left: 10px;
+        color: #6c757d;
+        font-size: 12px;
+        display: block;
+        font-weight: bold;
+        height: 36px;
+        line-height: 36px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .list ul li a:hover {
+        color: white;
+    }
+
+    .list ul li ul {
+        display: none;
+    }
+
+    .list ul li ul li {
+        border-left: 0;
+        border-right: 0;
+        background-color: #1a1e21;
+    }
+
+    .list ul li ul li ul {
+        display: none;
+    }
+
+    .list ul li ul li a {
+        padding-left: 20px;
+    }
+
+    .list ul li ul li ul li {
+        background-color: #1a1e21;
+    }
+
+    .list ul li ul li ul li a {
+        color: #6c757d;
+        padding-left: 30px;
+    }
+</style>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('.inactive').click(function () {
+            if ($(this).siblings('ul').css('display') === 'none') {
+                $(this).addClass('inactives');
+                $(this).siblings('ul').slideDown(100).children('li');
+            } else {
+                $(this).removeClass('inactives');
+                $(this).siblings('ul').slideUp(100);
+            }
+        })
+
+        $("#square").click(function () {
+            if ($('#left_body').css("width") === "0px") {
+                $('#left_body').stop().animate({
+                    width: "15%"
+                })
+                $('#right_body').stop().animate({
+                    width: "85%"
+                })
+                $('#square').html('<svg xmlns=\"http://www.w3.org/2000/svg\" color=\"darkorchid\" width=\"25\" height=\"25\" fill=\"currentColor\" class=\"bi bi-arrow-left-square-fill\" viewBox=\"0 0 16 16\">\n' +
+                    '<path d=\"M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z\"/>\n' +
+                    '</svg')
+            } else {
+                $('#left_body').stop().animate({
+                    width: "0",
+                })
+                $('#right_body').stop().animate({
+                    width: "100%"
+                })
+                $('#square').html('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"25\" height=\"25\" fill=\"currentColor\" class=\"bi bi-arrow-right-square-fill\" viewBox=\"0 0 16 16\">\n' +
+                    '<path d=\"M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z\"/>\n' +
+                    '</svg>')
+            }
+        })
+    });
+</script>
+<body>
+
+<div style="display: flex;position: absolute;left: 0;right: 0;top: 0;bottom: 0">
+    <!--   左边栏目-->
+    <div id="left_body" style="width: 15%">
+        <div style="background-color: #373b3e;width: 100%;height: 100%;position: relative;overflow: hidden;">
+            <div style="text-align: center;padding: 7% 0;background-color: #1a1e21">
+                <span style="font-size: 18px;color: slategray">超市管理后台</span>
+            </div>
+
+            <div class="list" style="background-color: #1a1e21">
+                <ul class="yiji">
+                    <li><a href="#">超市管理员守则</a></li>
+
+                    <li><a href="#" class="inactive active">用户管理</a>
+                        <ul>
+                            <li><a href="#">查看用户信息</a></li>
+                            <li><a href="#">查看用户</a></li>
+                            <li><a href="#">更改商品信息</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="inactive">商品管理</a>
+                        <ul style="display: none">
+                            <li><a href="#" class="inactive active">商品类型管理</a>
+                                <ul>
+                                    <li><a th:href="@{/addtypemarket}" target="iframe_name">添加商品类型</a></li>
+                                    <li><a href="#">下架商品</a></li>
+                                    <li><a href="#">更改商品类型</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#" class="inactive active">商品信息管理</a>
+                                <ul>
+                                    <li><a th:href="@{/index}" target="iframe_name">查看商品列表</a></li>
+                                    <li><a th:href="@{/addmarket}" target="iframe_name">添加商品</a></li>
+                                    <li><a href="addmarket" target="iframe_name">下架商品</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="last"><a href="#">《美术》杂志社</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="inactive">超市账户</a>
+                        <ul style="display: none">
+                            <li><a href="#" class="inactive active">账户明细</a>
+                                <ul>
+                                    <li><a href="#">办公室</a></li>
+                                    <li><a href="#">人事处</a></li>
+                                    <li><a href="#">组联部</a></li>
+                                    <li><a href="#">外联部</a></li>
+                                    <li><a href="#">研究部</a></li>
+                                    <li><a href="#">维权办</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#" class="inactive active">中国文联美术艺术中心</a>
+                                <ul>
+                                    <li><a href="#">综合部</a></li>
+                                    <li><a href="#">大型活动部</a></li>
+                                    <li><a href="#">展览部</a></li>
+                                    <li><a href="#">艺委会工作部</a></li>
+                                    <li><a href="#">信息资源部</a></li>
+                                    <li><a href="#">双年展办公室</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="inactive active"><a href="#">《美术》杂志社</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--    右边内容-->
+    <div id="right_body" style="width: 85%">
+        <div style="height: 5%;background-color: black;box-shadow: 0 0 10px #6c757d;border: solid #6c757d 1px">
+            <div style="padding: 5px 5px">
+                <a href="javascript:void(0)" id="square">
+                    <svg xmlns="http://www.w3.org/2000/svg" color="darkorchid" width="25" height="25"
+                         fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                        <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div style="height: 5%;background-color: white;border: solid #6c757d 1px;box-shadow: 0 0 10px #6c757d;display: flex">
+            <div style="padding: 8px 5px;width: 100px;background-color: #c7dbd2"><a href="">超市管理后台</a></div>
+            <span><a href=""></a></span>
+        </div>
+        <div style="height: 90%">
+            <iframe id="iframe_id" name="iframe_name" style="width: 100%;height: 100%" th:src="@{/test}"></iframe>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Signup Form </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/addmarket/modernforms.css}">
+    <link rel="stylesheet" th:href="@{/css/addmarket/font-awesome.css}">
+</head>
+<style>
+    .edit {
+        width: 800px;
+        margin: 50px 0px 50px 10px;
+        max-width: 700px;
+        background: #fff;
+        padding: 50px 40px;
+    }
+</style>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/editor/wangEditor.js}"></script>
+
+<body class="mdn-bg">
+<div style="display: flex">
+    <div class="modern-forms" style="margin-left: 10px">
+        <div class="modern-container mc2">
+            <div style="text-align: center">
+                <h1>添加商品</h1>
+            </div>
+            <form id="form_id" enctype="multipart/form-data">
+                <fieldset>
+                    <div class="form-row">
+                    </div><!-- end form-row -->
+
+                    <div class="col col-6">
+                        <div class="field-group mdn-select">
+                            <select id="Type_id" name="country">
+                                <option value="" selected>空</option>
+                                <option th:value="${t.marketTypeId}" th:each="t:${types}" th:text="${t.typeName}">Location</option>
+                            </select>
+                            <label class="mdn-label">顶级类型</label>
+                        </div>
+
+                        <div class="field-group mdn-select">
+                            <select id="Type_id_zi" name="country">
+                                <option value="" selected>空</option>
+                            </select>
+                            <label class="mdn-label">商品类型</label>
+                        </div>
+
+                        <div class="field-group prepend-icon">
+                            <input type="text" id="market_title" class="mdn-input" placeholder="商品标题">
+                            <label class="mdn-label">商品标题</label>
+                            <span class="mdn-icon"><i class="fa fa-male"></i></span>
+                            <span class="mdn-bar"></span>
+                            <span id="span_title"></span>
+                        </div>
+
+                        <div style="display: flex">
+                            <div class="field-group prepend-icon" style="width: 45%;margin-right: 10%">
+                                <input type="text" id="market_old" class="mdn-input" placeholder="商品原价">
+                                <label class="mdn-label">商品原价</label>
+                                <span class="mdn-icon"><i class="fa fa-male"></i></span>
+                                <span class="mdn-bar"></span>
+                                <span id="span_old"></span>
+                            </div>
+                            <div class="field-group prepend-icon" style="width: 45%">
+                                <input type="text" id="market_price" class="mdn-input" placeholder="商品现价">
+                                <label class="mdn-label">商品现价</label>
+                                <span class="mdn-icon"><i class="fa fa-male"></i></span>
+                                <span class="mdn-bar"></span>
+                                <span id="span_price"></span>
+                            </div>
+                        </div>
+                    </div><!-- end col-6 -->
+                    <div class="mdn-group block-group mdn-bottom-border">
+                        <label class="mdn-switch">
+                            <input type="hidden" name="terms" value="no">
+                            <input type="checkbox" id="init" name="terms" value="yes" checked>
+                            <span class="switch-toggle"></span>
+                            <span class="switch-label">是否在售</span>
+                        </label>
+                    </div><!-- mdn-group -->
+                    <div class="field-group prepend-icon">
+                        <input type="text" id="market_count" class="mdn-input" placeholder="库存">
+                        <label class="mdn-label">库存</label>
+                        <span class="mdn-icon"><i class="fa fa-user"></i></span>
+                        <span class="mdn-bar"></span>
+                        <span id="span_count"></span>
+                    </div>
+
+                    <div class="field-group prepend-icon">
+                        <input type="text" id="marketer_name" class="mdn-input" placeholder="商户名称">
+                        <label class="mdn-label">商户名称</label>
+                        <span class="mdn-icon"><i class="fa fa-lock"></i></span>
+                        <span class="mdn-bar"></span>
+                        <span id="spaner_name"></span>
+                    </div>
+
+                    <div class="field-group prepend-icon">
+                        <input type="text" id="Evaluation_Count" class="mdn-input" placeholder="评价次数">
+                        <label class="mdn-label">评价次数</label>
+                        <span class="mdn-icon"><i class="fa fa-lock"></i></span>
+                        <span class="mdn-bar"></span>
+                        <span id="span_Evaluation_count"></span>
+                    </div>
+
+                    <div class="field-group prepend-icon">
+                        <label class="mdn-label">商品图片</label>
+                        <div style="margin: 10px 0 0 0">
+                            <img id="img_view"
+                                 style="border-radius: 5px;border: solid lightgray 1px;width: 125px;height: 150px">
+                            <input type="file" id="pic" name="pic" style="display: none">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="mdn-footer">
+                    <button type="button" id="commit" class="mdn-button btn-primary">添加商品</button>
+                    <button type="reset" class="mdn-button btn-flat">重置</button>
+                </div>
+                <input type="hidden" name="detail" id="detail">
+            </form>
+        </div><!-- modern-container -->
+    </div><!-- modern-forms -->
+    <div class="edit">
+        <div class="">
+            <div style="text-align: center">
+                <h1>商品简介</h1>
+            </div>
+            <div class="form-row" style="background-color: white">
+                <div id="wangEdit" style="width: 100%">
+
+                </div>
+            </div>
+
+        </div><!-- modern-container -->
+    </div><!-- modern-forms -->
+</div>
+<script type="text/javascript">
+    //blur失去焦点事件,表单验证
+    $('#market_title').blur(function () {
+        var title = $('#market_title').val();
+        if(title == ""){
+            $('#span_title').html("<span style='color: red;font-size: 5px'>标题不能为空</span>")
+        }else{
+            $('#span_title').html(" ")
+        }
+    })
+    $('#market_old').blur(function () {
+        var old = $('#market_old').val();
+        var reg = /^[0-9]+.?$/;
+        if(old == "" || !reg.test(old)){
+            $('#span_old').html("<span style='color: red;font-size: 5px'>请输入数字</span>")
+        }else{
+            $('#span_old').html(" ")
+        }
+    })
+    $('#market_price').blur(function () {
+        var price = $('#market_price').val();
+        var reg = /^[0-9]+.?$/;
+        if(price == "" || !reg.test(price)){
+            $('#span_price').html("<span style='color: red;font-size: 5px'>请输入数字</span>")
+        }else{
+            $('#span_price').html(" ")
+        }
+    })
+    $('#market_count').blur(function () {
+        var count = $('#market_count').val();
+        var reg = /^[0-9]+$/;
+        if(count == "" || !reg.test(count)){
+            $('#span_count').html("<span style='color: red;font-size: 5px'>请输入数字</span>")
+        }else{
+            $('#span_count').html(" ")
+        }
+    })
+    $('#marketer_name').blur(function () {
+        var title = $('#marketer_name').val();
+        if(title == ""){
+            $('#spaner_name').html("<span style='color: red;font-size: 5px'>商户名称不能为空</span>")
+        }else{
+            $('#spaner_name').html(" ")
+        }
+    })
+    $('#Evaluation_Count').blur(function () {
+        var count = $('#Evaluation_Count').val();
+        var reg = /^[0-9]+$/;
+        if(count == "" || !reg.test(count)){
+            $('#span_Evaluation_count').html("<span style='color: red;font-size: 5px'>请输入数字</span>")
+        }else{
+            $('#span_Evaluation_count').html(" ")
+        }
+    })
+</script>
+<script type="text/javascript">
+    //富文本编辑框
+    var E = window.wangEditor
+    var editor = new E('#wangEdit')
+    editor.customConfig.uploadImgShowBase64 = true;
+    editor.customConfig.uploadImgParamsWithUrl = true;
+    editor.create();
+
+    $('#Type_id').change(function () {
+        var i = $('#Type_id').val();
+        $.ajax({
+            url:'/indexdata',
+            method:'post',
+            data: {'i':i},
+            // contentType:false,
+            // processData:false,
+            dataType:'json',
+            success:function (res) {
+                console.log(res.datas)
+                var h = ""
+                if(res.datas != false){
+                    $.each(res.datas.sonMarketTypes,function (index,element) {
+                        h = '<option value='+element.marketTypeId+'>'+element.typeName+'</option>'+h;
+                    })
+                    $('#Type_id_zi').html(h)
+                }else{
+                    $('#Type_id_zi').html('<option value="">空</option>')
+                }
+
+            }
+        })
+    })
+
+    //进行表单验证，后台传递数据
+    $('#commit').click(function () {
+        let text = editor.txt.html();
+        $('#detail').val(text);
+
+        //判断复选框有没有选中
+        if(!$('#init').is(':checked')){
+            $('#init').val("no");
+        }
+
+        $('#market_title').blur();
+        $('#market_old').blur();
+        $('#market_price').blur();
+        $('#market_count').blur();
+        $('#marketer_name').blur();
+        $('#Evaluation_Count').blur();
+
+        var a = $('#span_title').text();
+        var b = $('#span_old').text();
+        var c = $('#span_price').text();
+        var d = $('#span_count').text();
+        var e = $('#spaner_name').text();
+        var f =$('#span_Evaluation_count').text();
+
+        var formData = new FormData();
+        formData.append("file",$('#pic')[0].files[0]);
+        formData.append('marketTypeId',$('#Type_id_zi').val());
+        formData.append('markerTitle',$('#market_title').val());
+        formData.append('marketOldPrice',$('#market_old').val());
+        formData.append('marketPrice',$('#market_price').val());
+        formData.append('marketOnSale',$('#init').val());
+        formData.append('markerDetail',$('#detail').val());
+        formData.append('marketCount',$('#market_count').val());
+        formData.append('marketMerchartName',$('#marketer_name').val());
+        formData.append('marketEvaluationCount',$('#Evaluation_Count').val());
+
+        // {'marketTypeId':$('#Type_id').val(),'markerTitle':$('#market_title').val(),'pic':$('#pic')[0].files[0]
+        //     ,'marketOldPrice':$('#market_old').val(),'marketPrice':$('#market_price').val()
+        //     ,'marketOnSale':$('#init').val(),'markerDetail':$('#detail').val(),'marketCount':$('#market_count').val()},
+
+        if(a == " " && b == " " && c == " " && d == " " && e == " " && f == " "){
+            // $('#form_id').submit();
+            $.ajax({
+                url:'/addMarketdata',
+                method:'post',
+                data: formData,
+                contentType:false,
+                processData:false,
+                dataType:'json',
+                success:function (res) {
+                    alert('添加成功')
+                    location.reload();
+                }
+            })
+        }else{
+            alert('请填写完所有的必填项！！！')
+        }
+
+    })
+    //预览图片
+    function imgPreview(file, imgDom) {
+        if (window.FileReader) {
+            var reader = new FileReader();
+        } else {
+            alert('此设备不支持预览功能！')
+        }
+
+        var image = /^image\//;
+
+        if (!image.test(file.type)) {
+            alert('请选择照片！！')
+            return;
+        }
+        //获取文件路径
+        reader.readAsDataURL(file);
+
+        reader.onload = function (ev) {
+            imgDom.src = this.result;
+        }
+    }
+    $('#img_view').click(function () {
+        $('#pic').click();
+    })
+    //改变事件
+    $('#pic').change(function () {
+        let file = this.files[0];
+        imgPreview(file, $('#img_view')[0], this);
+    })
+</script>
+
+</body>
+</html>

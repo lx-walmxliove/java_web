@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.supermarket.dao.MarketTypeDao">
+  <resultMap id="BaseResultMap" type="com.example.supermarket.pojo.entity.MarketType">
+    <id column="market_type_id" jdbcType="INTEGER" property="marketTypeId" />
+    <result column="parent_type_id" jdbcType="INTEGER" property="parentTypeId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+
+<!--  <select id="" resultMap="BaseResultMap">-->
+<!--    -->
+<!--  </select>-->
+</mapper>

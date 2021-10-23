@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<style>
+    #market_div > div {
+        padding: 10px;
+    }
+
+    #marketbody > div {
+        padding-left: 40px;
+    }
+
+    [type=checkbox] {
+        width: 15px;
+        height: 15px;
+    }
+</style>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<body>
+
+<div class="layui-container" style="padding: 20px">
+    <!--头部-->
+    <div style="display: flex;align-items: center">
+        <div style="width: 25%;text-align: right;margin-right: 40px">
+            <img th:src="@{/imgs/index/jdlogo.png}" style="margin-left: 20px">
+        </div>
+
+        <div style="width: 40%">
+            <div style="display: flex;border: solid red;width: 100%">
+                <div style="width: 100%">
+                    <input type="text" style="height: 30px;border: none;width: 100%">
+                </div>
+                <div style="color: white;background: red;padding: 5px 20px;width: 20%;text-align: center">
+                    搜索
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 30%;display: flex">
+            <div style="cursor: pointer;width: 40%;text-align: center;border: solid lightgray 1px;background: rgb(245,245,245);padding: 6px;color: red;margin-left: 30px">
+                我的购物车(<span th:text="${session.shopcarcount}">0</span>)
+            </div>
+            <div id="login_button"
+                 style="cursor: pointer;width: 15%;text-align: center;border: solid lightgray 1px;background: rgb(245,245,245);padding: 6px;margin-left: 20%">
+                登录
+            </div>
+            <form id="form_id" th:action="@{/page/front/loginPage}" method="post">
+                <input type="hidden" name="url" id="url">
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-fluid" style="margin-top: 50px">
+        <div class="layui-row">
+            <form th:action="@{/orerInfo}" method="post" id="car_form">
+                <input type="hidden" name="orderInfoStr" id="orderInfoStr">
+                <input type="hidden" name="allCost" id="allCost">
+            </form>
+            <h2 style="color: red">全部商品&nbsp&nbsp<span th:text="${session.shopcarcount}"></span></h2>
+            <div style="display: flex;border-top: solid lightgray 1px" th:each="x:${cars}" id="market_div">
+                <div><input th:id="'check-'+${x.getShopCarId()}" type="checkbox"></div>
+                <div><img th:src="${x.getMarket().getMarketImg()}" style="width: 150px;height: 150px"></div>
+                <div id="marketbody" style="display: flex;align-items: center">
+                    <div style="width: 250px" th:text="${x.getMarket().getMarkerTitle()}"></div>
+                    <div>¥<span th:id="'price-'+${x.getShopCarId()}" th:text="${x.getMarket().getMarketPrice()}"></span>
+                    </div>
+                    <div style="display: flex">
+                        <div th:id="'add-'+${x.getShopCarId()}"
+                             style="user-select: none;cursor: pointer;font-weight: bold;align-items: center;font-size: 25px;background: rgb(230,230,230);justify-content: center;width: 30px;margin-right: 5px">
+                            +
+                        </div>
+                        <input style="height: 30px;width: 80px" th:id="'count-'+${x.getShopCarId()}"
+                               th:value="${x.getCount()}">
+                        <div th:id="'cut-'+${x.getShopCarId()}"
+                             style="user-select: none;cursor: pointer;font-weight: bold;align-items: center;font-size: 27px;background: rgb(230,230,230);justify-content: center;width: 30px;margin-left: 5px;margin-right: 10px">
+                            -
+                        </div>
+                    </div>
+                    <div style="font-weight: bold;width: 100px">¥<span
+                            th:id="'count_price-'+${x.getShopCarId()}"
+                            th:text="${x.getMarket().getMarketPrice()*x.getCount()}"></span></div>
+                    <div style="font-weight: bold">
+                        <button class="layui-btn-danger layui-btn-xs">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-container" style="width: 100%;position: fixed;bottom: 0;height: 50px;box-shadow: 0 0 10px lightgray">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div style="justify-content: space-between;display: flex;margin: 0px 174.6px;padding: 0px 20px">
+
+                <div style="display: flex;align-items: center">
+                    <div><input id="check_all" type="checkbox"> 全选</div>
+                    <div style="margin-left: 10px">删除选中商品</div>
+                </div>
+
+                <div style="display: flex;align-items: center">
+                    <div style="margin-right: 10px;color: gray;font-size: 12px">已选<span id="count_select"
+                                                                                        style="color: red;font-weight: bold;margin: 5px">0</span>商品
+                    </div>
+                    <div>总价：<span id="All_price" style="color: red;margin-right: 10px;font-size: 20px">0.0</span></div>
+                    <div>
+                        <div id="gostatment" style="color: white;background-color: red;padding: 10px;font-size: 20px">
+                            <span style="cursor: pointer;font-size: 15px;height: 50px">
+                                    去结算
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    //总钱数
+    function getSumPrice() {
+        let alCost = 0.0;
+        $('[id^=check-]').each(function () {
+            if (this.checked) {
+                let shopCarId = this.id.split('-')[1];
+                let count = $("#count-" + shopCarId).val();//数量
+                let price = parseFloat($('#price-' + shopCarId).text());//单价
+                count_price();
+                alCost += count * price;
+            }
+        })
+        $('#All_price').text(alCost.toFixed(1));
+        return alCost;
+    }
+
+    //单个购物车的价格
+    function count_price() {
+        $('[id^=check-]').each(function () {
+            let shopCarId = this.id.split('-')[1];
+            let count = $("#count-" + shopCarId).val();//数量
+            let price = parseFloat($('#price-' + shopCarId).text());//单价
+            $('#count_price-' + shopCarId).text((count * price).toFixed(1));
+        })
+    }
+
+    //已选购物车商品个数
+    function count() {
+        let num = 0;
+        $('[id^=check-]').each(function () {
+            if (this.checked) {
+                num++;
+            }
+        })
+        return num;
+    }
+
+    layui.use(['table', 'form', 'layer'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+
+        $("[id^=add-]").click(function () {
+            let id = this.id.split('-')[1];
+            let v = $('#count-' + id).val();
+            v++;
+            $('#count-' + id).val(v);
+
+            getSumPrice();
+            count_price();
+        })
+
+        $('[id^=cut-]').click(function () {
+            let id = this.id.split('-')[1];
+            let v = $('#count-' + id).val();
+            if (v > 0) {
+                v--;
+            }
+            $('#count-' + id).val(v);
+            getSumPrice();
+            count_price();
+        })
+
+        // //判断复选框有没有选中,全选复杂写法
+        // $('#check_all').click(function () {
+        //     let count = 0;
+        //     if ($('#check_all').is(':checked')) {
+        //         $.each([[${cars}]], function (index, element) {
+        //             $('[id^=check-]')[index].checked = true;
+        //             count++;
+        //         })
+        //         getSumPrice();
+        //         $('#count_select').text(count)
+        //     } else {
+        //         $.each([[${cars}]], function (index, element) {
+        //             $('[id^=check-]')[index].checked = false;
+        //             $('#All_price').text(0);
+        //             $('#count_select').text(0)
+        //         })
+        //     }
+        // })
+
+        //全选
+        $('#check_all').click(function () {
+            let checked = this.checked;
+            $('[id^=check-]').each(function () {
+                this.checked = checked;
+            })
+            getSumPrice();
+            $('#count_select').text(count());
+        })
+
+        //单击选择商品
+        $('[id^=check-]').click(function () {
+            getSumPrice();
+            num = count();
+            if(num == [[${session.shopcarcount}]]){
+                $('#check_all')[0].checked = true;
+            }else{
+                $('#check_all')[0].checked = false;
+            }
+            $('#count_select').text(num);
+        })
+
+        $('[id^=count-]').change(function () {
+            getSumPrice();
+        })
+
+        //提交订单
+        $('#gostatment').click(function () {
+            let arr = [];
+            let car = {};
+            let markets = {};
+            $('[id^=check-]').each(function () {
+                let cars = [[${cars}]];
+                if(this.checked){
+                    let id = this.id.split('-')[1];
+                    let count = $('#count-'+id).val();
+                    car.count = count;
+                    $.each(cars,function (index, element) {
+                        if(id == element.shopCarId){
+                            // car.market = element.getMarket();
+                            car = element;
+                            car.count = count;
+                        }
+                    })
+                    arr.push(car);
+                }
+            })
+            //把对象数字转成json字符串
+            $('#orderInfoStr').val(JSON.stringify(arr));
+            $('#allCost').val(getSumPrice());
+            //进行表单提交
+            $('#car_form').submit();
+        })
+
+        $('#login_button').click(function () {
+            let url = window.location.href;
+            $('#url').val(url);
+            $('#form_id').submit();
+        })
+    })
+</script>
+</html>

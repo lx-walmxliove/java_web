@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<body class="layui-container" style="padding: 20px">
+<!--头部-->
+<div style="display: flex;align-items: center">
+    <div style="width: 25%;text-align: right;margin-right: 40px">
+        <img th:src="@{/imgs/index/jdlogo.png}" style="margin-left: 20px">
+    </div>
+
+    <div style="width: 40%">
+        <div style="display: flex;border: solid red;width: 100%">
+            <div style="width: 100%">
+                <input type="text" style="height: 30px;border: none;width: 100%">
+            </div>
+            <div style="color: white;background: red;padding: 5px 20px;width: 20%;text-align: center">
+                搜索
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 30%;display: flex">
+        <div onclick="window.location='/showshopcar'" style="cursor: pointer;width: 40%;text-align: center;border: solid lightgray 1px;background: rgb(245,245,245);padding: 6px;color: red;margin-left: 30px">
+            我的购物车(<span th:text="${session.shopcarcount}">0</span>)
+        </div>
+        <div onclick="window.location='/page/front/loginPage'" id="login_button"
+             style="cursor: pointer;width: 15%;text-align: center;border: solid lightgray 1px;background: rgb(245,245,245);padding: 6px;margin-left: 20%">
+            登录
+        </div>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row" style="border: solid lightgray 1px;margin-top: 10px">
+        <div style="display: flex">
+            <div style="padding: 20px">
+                <img th:src="${markets.getMarketImg()}" style="width: 300px;height: 300px">
+            </div>
+            <div style="padding: 20px">
+                <h2 th:text="${markets.getMarkerTitle()}" style="font-weight: bold;margin: 10px"></h2>
+                <div style="margin: 10px;text-decoration: line-through"
+                     th:text="'原价：'+${markets.getMarketOldPrice()}"></div>
+                <div style="margin: 10px"><span>秒杀价:</span><span th:text="${markets.getMarketPrice()}"
+                                                                 style="font-weight: bold;color: orange;margin: 10px;font-size: 20px"></span>
+                </div>
+                <div style="margin: 10px" th:text="'库存：'+${markets.getMarketCount()}"></div>
+                <div style="margin: 10px" th:text="'商家：'+${markets.getMarketMerchartName()}"></div>
+                <div style="margin: 10px" th:text="'评价次数：'+${markets.getMarketEvaluationCount()}"></div>
+                <hr style="padding: 10px">
+
+                <div style="display: flex;padding: 5px">
+                    <div style="display: flex;align-items: center;text-align: center">
+                        <div id="add"
+                                style="user-select: none;cursor: pointer;font-weight: bold;align-items: center;font-size: 25px;background: rgb(230,230,230);justify-content: center;width: 30px;margin-right: 5px">
+                            +
+                        </div>
+                        <input style="height: 30px;width: 80px" id="count" value="0">
+                        <div id="cut"
+                                style="user-select: none;cursor: pointer;font-weight: bold;align-items: center;font-size: 27px;background: rgb(230,230,230);justify-content: center;width: 30px;margin-left: 5px;margin-right: 10px">
+                            -
+                        </div>
+                    </div>
+
+                    <button id="shopcar"
+                            style="cursor: pointer;color: white;font-weight: bold;font-size: 10px;background-color: red;padding: 10px">
+                        加入购物车
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div th:utext="${markets.getMarkerDetail()}" style="padding: 10px;margin-left: 50px"></div>
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table', 'form', 'layer'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+        $('#add').click(function () {
+            var v = $('#count').val();
+            v++;
+            $('#count').val(v);
+        })
+
+        $('#cut').click(function () {
+            var v = $('#count').val();
+            if (v > 0) {
+                v--;
+            }
+            $('#count').val(v);
+        })
+
+        $('#shopcar').click(function () {
+            let shopcar = {};
+            shopcar.marketId = [[${markets.getMarkerId()}]];
+            shopcar.count = $('#count').val();
+
+            $.post('/addShopcar', shopcar, function (res) {
+                if (res.res) {
+                    layer.msg(res.msg);
+                    // location.reload();
+                } else {
+                    if (401 == res.status) {//无权限,请登录
+                        window.location = '/page/front/loginPage';
+                    }
+                }
+            })
+
+        })
+
+    })
+</script>
+</html>

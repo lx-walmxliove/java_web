@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<style>
+    #login_button:hover{
+        color: red;
+        cursor: pointer;
+    }
+    .market_title:hover{
+        color: red;
+        cursor: pointer;
+    }
+    .market_body:hover{
+        box-shadow: 0 0 5px lightgray;
+    }
+    #showcar:hover{
+        border: solid lightgray 1px;
+        cursor: pointer;
+    }
+    [id^=type-]:hover{
+        color: red;
+        cursor: pointer;
+    }
+</style>
+<body>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<div>
+
+</div>
+<!--头部-->
+<div style="display: flex;align-items: center">
+    <div style="width: 30%">
+        <img th:src="@{/imgs/index/jdlogo.png}" style="margin-left: 30px">
+    </div>
+
+    <div style="width: 40%">
+        <div style="display: flex;border: solid red;width: 100%">
+            <div style="width: 100%" >
+                <input type="text" style="height: 30px;border: none;width: 100%">
+            </div>
+            <div style="color: white;background: red;padding: 5px 20px;width: 20%;text-align: center">
+                搜索
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 30%;display: flex">
+        <div id="showcar" onclick="window.open('/showshopcar')" style="cursor: pointer;width: 40%;text-align: center;background: rgb(245,245,245);padding: 6px;color: red;margin-left: 30px">
+            我的购物车(<span th:text="${session.shopcarcount}">0</span>)
+        </div>
+        <div id="login_button" style="cursor: pointer;width: 15%;text-align: center;border: solid lightgray 1px;background: rgb(245,245,245);padding: 6px;margin-left: 30px">
+            登录
+        </div>
+        <form id="form_id" th:action="@{/page/front/loginPage}" method="post">
+            <input type="hidden" name="url" id="url">
+        </form>
+    </div>
+</div>
+
+<div style="display: flex;position: absolute;left: 0;right: 0;top: 50px;padding: 15px;" >
+    <div style="width: 20%;border: solid red 1px">
+        <div style="display: flex;align-items: center;padding: 5px" th:each="x:${types}">
+            <div style="font-weight: bolder" th:text="${x.typeName}"></div>
+            <div style="margin-left: 5px">
+                <div style="display: flex;flex-wrap: wrap">
+                    <div th:id="'type-'+${ct.marketTypeId}" style="margin: 5px" th:each="ct:${x.sonMarketTypes}" th:text="${ct.typeName}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 80%;border: solid red 1px;display: flex;padding: 20px 10px;flex-wrap: wrap" id="market_body">
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    layui.use(['table','form','layer'],function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+        $("[id^=type-]").click(function () {
+            let typeId = this.id.split("-")[1];
+
+            $("[id^=type-]").css({color: ""});
+            $(this).css({color: 'red'});
+
+            $.post('/queryMarketDataById/'+typeId,function (res) {
+                if(res.res){
+                    let data = res.data;
+                    $('#market_body').empty()
+                    $.each(data,function (index, element) {
+                        // let imgurl = element.marketImg.split("target")[1]
+                        let body = $("   <div class=\"market_body\" style=\"padding: 10px;width: 23%\">\n" +
+                            "            <div><img style='width: 240px;height: 240px' src=\""+element.marketImg+"\"></div>\n" +
+                            "            <div style=\"color: orangered\">¥<span style=\"font-size: 20px\">"+element.marketPrice+"</span></div>\n" +
+                            "            <div class=\"market_title\"><span style=\"font-size: 5px\">"+element.markerTitle+"</span></div>\n" +
+                            "            <div style=\"color: orangered;font-size: 12px;padding: 4px\"><span style=\"font-weight: bold\">"+element.marketEvaluationCount+"</span><span style=\"color: gray\">条评价</span></div>\n" +
+                            "            <div style=\"color: gray;font-size: 10px\">"+element.marketMerchartName+"</div>\n" +
+                            "        </div>")
+                        $('#market_body').append(body);
+
+                        body.click(function () {
+                            window.open('/marketdetil/'+element.markerId);
+                        })
+
+                    })
+                }
+            })
+
+        })
+
+        $('#login_button').click(function () {
+            let url = window.location.href;
+            $('#url').val(url);
+            $('#form_id').submit();
+        })
+    })
+</script>
+</html>

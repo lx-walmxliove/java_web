@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<style>
+    #market_div > div {
+        padding: 10px;
+    }
+
+    #marketbody > div {
+        padding-left: 40px;
+    }
+
+    [type=checkbox] {
+        width: 15px;
+        height: 15px;
+    }
+</style>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<body>
+
+<div class="layui-row" style="display: flex">
+    <!--定义列数（md值必须满足总和等于12）-->
+    <div class="layui-col-md3">1</div>
+    <div class="layui-col-md6">
+        <h3 style="color: black;text-align: center">确认订单</h3>
+        <div style="background-color: lightgray;height: auto;padding: 10px 10px 5px 10px;">
+            <div style="padding-bottom:5px">
+                <div style="cursor: pointer;padding: 5px;background-color: white;height: auto;border-radius: 8px;box-shadow: 0px 0px 5px #aaaaaa">
+                    <div style="padding: 5px" id="address_id" th:text="${address.getProvince()+address.getCity()+address.getDetailAddress()}">地址</div>
+                    <div style="padding: 5px" th:text="${address.getReceiver()+' '+address.getPhone()}">联系人</div>
+                </div>
+            </div>
+
+            <div style="background-color: white;height: 100%;border-radius: 8px;box-shadow: 0px 0px 5px #aaaaaa">
+                <div style="padding: 5px;height: auto;box-shadow: 0px 0px 5px #aaaaaa">
+                    <div>商店</div>
+                </div>
+                <div style="padding: 5px;display: flex;border-top: solid lightgray 1px"
+                     th:each="x:${shops}"
+                     id="market_div">
+                    <div style="padding: 0px 10px 0px 10px;width: 100%">
+                        <div style="display: flex;justify-content: space-between">
+                            <div style="display: flex;padding-top: 5px">
+                                <div><img th:src="${x.getMarket().getMarketImg()}" style="width: 50px;height: 50px"></div>
+                                <div style="font-size: 10px">
+                                    <div style="padding-left: 10px;width: 400px;flex-wrap: wrap" th:text="${x.getMarket().getMarkerTitle()}">名字</div>
+                                    <div style="padding-left: 10px;display: flex;">
+                                        &nbsp<div style="font-size: 10px" th:text="${x.count+'个'}">个数</div>&nbsp&nbsp
+                                        <div th:text="${x.getMarket().getMarketPrice()}">单价</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="marketbody" style="display: flex;align-items: center">
+                                <div>¥<span th:text="${x.getMarket().getMarketPrice()*x.getCount()}">111</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding: 10px 0">
+                    <div style="margin: 0 auto;width: 95%;padding: 5px;background-color: lightgray;height: auto;border-radius: 3px">
+                        <div style="text-align: center" th:text="${'共'+shops.size()+'个商品'}"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="display: flex;padding: 10px 15px 10px 15px;height: auto;align-items: center;justify-content: space-between">
+                        <div>包装费</div>
+                        <div>¥<span>5.0</span></div>
+                    </div>
+                    <div style="display: flex;padding: 10px 15px 10px 15px;height: auto;align-items: center;justify-content: space-between">
+                        <div>配送费</div>
+                        <div>¥<span>5.0</span></div>
+                    </div>
+                    <div style="display: flex;padding: 10px 15px 10px 15px;height: auto;align-items: center;justify-content: space-between">
+                        <div>减免</div>
+                        <div><span style="color: tomato" th:text="${'- ¥'+allRelief}">暂无优惠</span></div>
+                    </div>
+                    <div style="display: flex;padding: 10px 15px 10px 15px;height: auto;align-items: center;justify-content: space-between">
+                        <div>红包</div>
+                        <div><span style="color: #AEBCC6">暂无优惠</span></div>
+                    </div>
+                    <div style="padding: 10px 15px 10px 15px;height: auto">
+                        备注
+                    </div>
+                    <div style="padding: 5px 15px 10px 15px;height: auto;border-bottom: solid lightgray 1px">
+                        <input type="textarea" style="width: 100%;height: 50px">
+                    </div>
+                    <div style="display: flex;height: 40px;justify-content: space-between">
+                        <div></div>
+                        <div style="display: flex;align-items: center">
+                            <div style="height: 30px;margin-right: 10px;padding-top: 15px;font-size: 10px">节省金额:</div>
+                            <div style="padding-top: 17px;height: 30px;color: tomato;margin-right: 10px;font-size: 10px" th:text="${allRelief}">xxx</div>
+                            <div style="height: 30px;margin-right: 10px;padding-top: 15px;font-size: 10px">实付金额:</div>
+                            <div style="height: 30px;color: red;margin-right: 10px;font-size: 20px" th:text="${actuallyPaid}">xxx</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="pay" style="cursor: pointer;background-color: orange;width: 100%;height: 50px;text-align: center;margin-top: 20px">
+                <div style="padding-top: 15px">
+                    <span style="color: white">确认支付</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-md3">3</div>
+</div>
+<form id="form_pay" action="/orderpay" method="post">
+    <input type="hidden" name="allCost" th:value="${allCost}" th:if="${allCost != null}">
+    <input type="hidden" name="actualPayment" th:value="${actuallyPaid}" th:if="${allCost != null}">
+    <input type="hidden" name="totalDeduction" th:value="${allRelief}" th:if="${allCost != null}">
+    <input type="hidden" name="receiverName" th:value="${address.getReceiver()}" th:if="${address != null}">
+    <input type="hidden" name="receiverPhone" th:value="${address.getPhone()}" th:if="${address != null}">
+    <input type="hidden" name="receiverAddress" id="receiverAddress">
+
+</form>
+</body>
+<script type="text/javascript" th:inline="javascript">
+
+    layui.use(['table', 'form', 'layer'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+        $('#pay').click(function () {
+            $('#receiverAddress').val($('#address_id').text());
+            $('#form_pay').submit();
+        })
+
+    })
+</script>
+</html>

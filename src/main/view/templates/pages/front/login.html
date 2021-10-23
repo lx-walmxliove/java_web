@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/login/bookstrap.css}">
+<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+<style>
+    .col-12 {
+        width: 80%;
+        margin: 10px 40px;
+    }
+</style>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+<body>
+<div style="display: flex;justify-content: center;position: absolute;left: 0;right: 0;top: 0;bottom: 0">
+    <div style="display: flex;justify-content: center;height: 100%;align-items: center;padding: 20px">
+        <form style="border: solid #1E90FF 1px;border-radius: 10px;box-shadow: 0 0 10px #1E90FF" novalidate>
+            <div style="width: 400px;height: 300px">
+
+                <div class="col-12">
+                    <label for="username" class="form-label">用户名</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username Or PhoneNumber" required>
+                        <div class="invalid-feedback">
+                            Your username is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="password" class="form-label">密码</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    <div class="invalid-feedback">
+                        Please enter a valid email address for shipping updates.
+                    </div>
+                </div>
+
+<!--                <div class="col-12">-->
+<!--                    <div th:text="${errorMsg}" style="color: red;font-size: 10px"></div>-->
+<!--                </div>-->
+
+                <div style="display: flex;margin-left: 15%">
+                    <div style="width: 120px;margin: 10px 10px">
+                        <button class="w-100 btn btn-primary btn-lg" id="btn" type="button">登录</button>
+                    </div>
+                    <div style="width: 120px;margin: 10px 10px">
+                        <button class="w-100 btn btn-primary btn-lg" type="reset">重置</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    layui.use(['table','form','layer'],function () {
+        var layer = layui.layer
+            , form = layui.form
+            , table = layui.table;
+
+        $('#btn').click(function () {
+            let arr = {};
+            arr.username = $('#username').val();
+            arr.password = $('#password').val();
+            $.post('/page/front/login',arr,function (res) {
+                layer.msg(res.msg)
+                if(res.res){
+                    if([[${url}]] != null){
+                        window.location = [[${url}]];
+                    }else{
+                        window.location = '/index';
+                    }
+                }
+            })
+        })
+
+    })
+</script>
+</html>
